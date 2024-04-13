@@ -45,12 +45,13 @@ class URLTests(TestCase):
             price='от 100 рублей',
         )
         cls.info = Info.objects.create(
-            description='Тестовое описание архитектора', image=cls.uploaded_gif
+            description='Тестовое описание архитектора',
+            image=cls.uploaded_gif
         )
         cls.contact = Contact.objects.create(
-            telephone='89991112233',
+            telephone=89991112233,
             email='email@yandex.ru',
-            description='Описание контактов',
+            description='Описание контакта',
         )
 
     @classmethod
@@ -88,12 +89,10 @@ class URLTests(TestCase):
             projects_category_0 = first_object.category.title
             projects_area_0 = first_object.area
             projects_description_0 = first_object.description
-            self.assertEqual(projects_title_0, 'Project')
-            self.assertEqual(projects_category_0, 'Заголовок категории')
-            self.assertEqual(projects_area_0, 'Область')
-            self.assertEqual(
-                projects_description_0, 'Тестовое описание проекта'
-            )
+            self.assertEqual(self.project.title, projects_title_0)
+            self.assertEqual(self.project.category.title, projects_category_0)
+            self.assertEqual(self.project.area, projects_area_0)
+            self.assertEqual(self.project.description, projects_description_0)
 
     def test_services_page_show_correct_context(self):
         """Шаблон services сформирован с правильным контекстом."""
@@ -102,9 +101,9 @@ class URLTests(TestCase):
         services_title_0 = first_object.title
         services_description_0 = first_object.description
         services_price_0 = first_object.price
-        self.assertEqual(services_title_0, 'Услуга')
-        self.assertEqual(services_description_0, 'Тестовое описание услуги')
-        self.assertEqual(services_price_0, 'от 100 рублей')
+        self.assertEqual(self.service.title, services_title_0)
+        self.assertEqual(self.service.description, services_description_0)
+        self.assertEqual(self.service.price, services_price_0)
 
     def test_project_info_show_correct_context(self):
         """Шаблон project_info сформирован с правильным контекстом."""
@@ -119,6 +118,10 @@ class URLTests(TestCase):
     def test_contacts_page_show_correct_context(self):
         """Шаблон contacts сформирован с правильным контекстом."""
         response = self.client.get(reverse('create_email'))
+        author_contacts = response.context['contacts'][0]
+        test_author_telephone = author_contacts.telephone
+        test_author_email = author_contacts.email
+        test_author_description = author_contacts.description
         form_fields = {
             'name': forms.fields.CharField,
             'phone_number': forms.fields.CharField,
@@ -129,3 +132,15 @@ class URLTests(TestCase):
             with self.subTest(value=value):
                 form_field = response.context.get('form').fields.get(value)
                 self.assertIsInstance(form_field, expected)
+        self.assertEqual(self.contact.telephone, test_author_telephone)
+        self.assertEqual(self.contact.email, test_author_email)
+        self.assertEqual(self.contact.description, test_author_description)
+
+    def test_about_page_show_correct_context(self):
+        """Шаблон about сформирован с правильным контекстом."""
+        response = self.client.get(reverse('about'))
+        author_info = response.context['info'][0]
+        test_author_description = author_info.description
+        test_author_image = author_info.image
+        self.assertEqual(self.info.description, test_author_description)
+        self.assertEqual(self.info.image, test_author_image)

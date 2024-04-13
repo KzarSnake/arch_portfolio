@@ -8,9 +8,9 @@
 <hr />
 <div class="row align-items-start">
   <div class="col">
-    <h5 class="mb-5">Телефон: 8-900-333-22-11</h5>
-    <h5 class="mb-5">E-mail: architect@stroim.ru</h5>
-    <h5 class="mb-5">Telegram: t.me/architect</h5>
+    <h5 class="mb-5">Телефон: {{ contacts.telephone }}</h5>
+    <h5 class="mb-5">E-mail: {{ contacts.email }}</h5>
+    <h5 class="mb-5">Дополнительно: {{ contacts.description }}</h5>
   </div>
   <div class="col">
     <form action="/contacts/"method="POST">

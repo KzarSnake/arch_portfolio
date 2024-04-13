@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MailForm
-from .models import Image, Project, Service
+from .models import Image, Project, Service, Contact, Info
 
 
 def home(request):
@@ -22,6 +22,7 @@ def all_projects(request):
 
 
 def create_email(request):
+    contacts = Contact.objects.all()
     if request.method == 'POST':
         form = MailForm(request.POST)
         if form.is_valid():
@@ -39,7 +40,9 @@ def create_email(request):
         return redirect('home')
     else:
         form = MailForm()
-    return render(request, 'portfolio/contacts.html', {'form': form})
+    return render(request,
+                  'portfolio/contacts.html',
+                  {'form': form, 'contacts': contacts})
 
 
 def project_info(request, id):
@@ -53,7 +56,8 @@ def project_info(request, id):
 
 
 def about(request):
-    return render(request, 'portfolio/about.html')
+    info = Info.objects.all()
+    return render(request, 'portfolio/about.html', {'info': info})
 
 
 def services(request):

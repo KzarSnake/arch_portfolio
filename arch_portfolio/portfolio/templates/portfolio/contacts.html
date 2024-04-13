@@ -1,0 +1,42 @@
+{% extends "portfolio/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<h1 class="font-weight-bold text-center">Контакты</h1>
+<hr />
+<div class="row align-items-start">
+  <div class="col">
+    <h5 class="mb-5">Телефон: 8-900-333-22-11</h5>
+    <h5 class="mb-5">E-mail: architect@stroim.ru</h5>
+    <h5 class="mb-5">Telegram: t.me/architect</h5>
+  </div>
+  <div class="col">
+    <form action="/contacts/"method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="name">Имя:*</label>
+        <input type="text" placeholder="Имя Фамилия" name="name" class="form-control" id="name" required>
+      </div>
+      <div class="form-group">
+        <label for="phone_number">Телефон:*</label>
+        <input name="phone_number" placeholder="Номер телефона" class="form-control" id="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="contact">E-mail или Мессенджер:</label>
+        <input name="contact" placeholder="Контакт для связи" class="form-control" id="contact">
+      </div>
+      <div class="form-group">
+        <label for="memo">Сообщение:</label>
+        <textarea style="height:200px;" name="memo" placeholder="Текст сообщения" class="form-control" id="memo" ></textarea>
+      </div>
+      <button type="submit" class="btn btn-info btn-block">Отправить письмо</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

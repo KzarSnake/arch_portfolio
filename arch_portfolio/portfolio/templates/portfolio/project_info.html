@@ -1,0 +1,20 @@
+{% extends "portfolio/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<h1 class="text-center mt-5" id="blogdetailtitle">{{ project.title }}</h1>
+
+{{ project.description|safe }}
+
+{% for image in images %}
+<div class="row justify-content-center my-3">
+  <div class="col-md-10">
+    <img src="{{ image.image.url }}" class="img-fluid mb-2">
+    <h4>{{ image.description|striptags }}</h4>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

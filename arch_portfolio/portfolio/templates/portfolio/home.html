@@ -1,0 +1,26 @@
+{% extends "portfolio/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="card bg-dark border border-0">
+    <img src="{% static 'portfolio/start_picture.jpg' %}" class="card-img">
+</div>
+<hr>
+<div class="row">
+  {% for project in projects %}
+  <div class="card text-center col-6">
+    <div class="card-body">
+      <h5 class="card-title">{{ project.title }}</h5>
+      {% for image in project.images.all %}
+        {% if image.is_presentation %}
+          <img src="{{ image.image.url }}" class="card-img-top">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

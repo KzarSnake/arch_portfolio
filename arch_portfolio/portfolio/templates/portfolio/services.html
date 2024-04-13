@@ -1,0 +1,28 @@
+{% extends "portfolio/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<h1 class="font-weight-bold text-center">Услуги</h1>
+<hr />
+<div class="row">
+  <div class="card-deck">
+{% for service in services %}
+      <div class="card border border-0 text-center">
+        <img src="{% static "portfolio/services_line.png" %}" style="width: 70%; margin-left: auto; margin-right: auto;" class="img-fluid mb-2">
+        <div class="card-body">
+          <h4 class="card-title">{{ service.title }}</h4>
+          <p class="card-text">{{ service.description }}</p>
+        </div>
+        <div class="card-footer bg-transparent text-info border-0">
+          <h3 class="card-text">{{ service.price }}</h3>
+        </div>
+        <img style="transform: rotate(180deg); width: 70%; margin-left: auto; margin-right: auto;" src="{% static "portfolio/services_line.png" %}" class="img-fluid mb-2">
+      </div>
+{% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

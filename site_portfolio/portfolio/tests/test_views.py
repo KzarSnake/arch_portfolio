@@ -36,17 +36,14 @@ class URLTests(TestCase):
             date=dt.datetime.now(),
             description='Тестовое описание проекта',
         )
-        cls.image = Image.objects.create(
-            project=cls.project, image=cls.uploaded_gif
-        )
+        cls.image = Image.objects.create(project=cls.project, image=cls.uploaded_gif)
         cls.service = Service.objects.create(
             title='Услуга',
             description='Тестовое описание услуги',
             price='от 100 рублей',
         )
         cls.info = Info.objects.create(
-            description='Тестовое описание архитектора',
-            image=cls.uploaded_gif
+            description='Тестовое описание архитектора', image=cls.uploaded_gif
         )
         cls.contact = Contact.objects.create(
             telephone=89991112233,
@@ -85,43 +82,51 @@ class URLTests(TestCase):
         for template in templates_list:
             response = self.client.get(reverse(template))
             first_object = response.context['projects'][0]
-            projects_title_0 = first_object.title
-            projects_category_0 = first_object.category.title
-            projects_area_0 = first_object.area
-            projects_description_0 = first_object.description
-            self.assertEqual(self.project.title, projects_title_0)
-            self.assertEqual(self.project.category.title, projects_category_0)
-            self.assertEqual(self.project.area, projects_area_0)
-            self.assertEqual(self.project.description, projects_description_0)
+            project_fields = {
+                self.project.title: first_object.title,
+                self.project.category.title: first_object.category.title,
+                self.project.area: first_object.area,
+                self.project.description: first_object.description,
+            }
+            for fixture_field, project_field in project_fields.items():
+                with self.subTest():
+                    self.assertEqual(project_field, fixture_field)
 
     def test_services_page_show_correct_context(self):
         """Шаблон services сформирован с правильным контекстом."""
         response = self.client.get(reverse('services'))
         first_object = response.context['services'][0]
-        services_title_0 = first_object.title
-        services_description_0 = first_object.description
-        services_price_0 = first_object.price
-        self.assertEqual(self.service.title, services_title_0)
-        self.assertEqual(self.service.description, services_description_0)
-        self.assertEqual(self.service.price, services_price_0)
+        service_fields = {
+            self.service.title: first_object.title,
+            self.service.description: first_object.description,
+            self.service.price: first_object.price,
+        }
+        for fixture_field, service_field in service_fields.items():
+            with self.subTest():
+                self.assertEqual(service_field, fixture_field)
 
     def test_project_info_show_correct_context(self):
         """Шаблон project_info сформирован с правильным контекстом."""
-        response = self.client.get(
-            reverse('project_info', args=[self.project.id])
-        )
+        response = self.client.get(reverse('project_info', args=[self.project.id]))
         test_project = response.context.get('project')
         test_image = response.context.get('images')[0]
-        self.assertEqual(self.project.id, test_project.id)
-        self.assertEqual(self.image.image, test_image.image)
+        project_info_fields = {
+            self.project.id: test_project.id,
+            self.image.image: test_image.image,
+        }
+        for fixture_field, project_info_field in project_info_fields.items():
+            with self.subTest():
+                self.assertEqual(project_info_field, fixture_field)
 
     def test_contacts_page_show_correct_context(self):
         """Шаблон contacts сформирован с правильным контекстом."""
         response = self.client.get(reverse('create_email'))
         author_contacts = response.context['contacts'][0]
-        test_author_telephone = author_contacts.telephone
-        test_author_email = author_contacts.email
-        test_author_description = author_contacts.description
+        contact_fields = {
+            self.contact.telephone: author_contacts.telephone,
+            self.contact.email: author_contacts.email,
+            self.contact.description: author_contacts.description,
+        }
         form_fields = {
             'name': forms.fields.CharField,
             'phone_number': forms.fields.CharField,
@@ -132,15 +137,18 @@ class URLTests(TestCase):
             with self.subTest(value=value):
                 form_field = response.context.get('form').fields.get(value)
                 self.assertIsInstance(form_field, expected)
-        self.assertEqual(self.contact.telephone, test_author_telephone)
-        self.assertEqual(self.contact.email, test_author_email)
-        self.assertEqual(self.contact.description, test_author_description)
+        for fixture_field, contact_field in contact_fields.items():
+            with self.subTest():
+                self.assertEqual(contact_field, fixture_field)
 
     def test_about_page_show_correct_context(self):
         """Шаблон about сформирован с правильным контекстом."""
         response = self.client.get(reverse('about'))
         author_info = response.context['info'][0]
-        test_author_description = author_info.description
-        test_author_image = author_info.image
-        self.assertEqual(self.info.description, test_author_description)
-        self.assertEqual(self.info.image, test_author_image)
+        author_fields = {
+            self.info.description: author_info.description,
+            self.info.image: author_info.image,
+        }
+        for fixture_field, author_field in author_fields.items():
+            with self.subTest():
+                self.assertEqual(author_field, fixture_field)

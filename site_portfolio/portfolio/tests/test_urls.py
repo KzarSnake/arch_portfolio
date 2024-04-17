@@ -11,20 +11,18 @@ class URLTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.category = Category.objects.create(
-            title='Заголовок категории'
-        )
+        cls.category = Category.objects.create(title='Заголовок категории')
         cls.project = Project.objects.create(
             title='Project',
             category=cls.category,
             area='Область',
             date=dt.datetime.now(),
-            description='Тестовое описание проекта'
+            description='Тестовое описание проекта',
         )
         cls.service = Service.objects.create(
             title='Услуга',
             description='Тестовое описание услуги',
-            price='от 100 рублей'
+            price='от 100 рублей',
         )
 
     def setUp(self):

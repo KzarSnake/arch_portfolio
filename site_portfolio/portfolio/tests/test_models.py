@@ -5,7 +5,7 @@ import tempfile
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
-from portfolio.models import Category, Image, Project
+from portfolio.models import Category, Image, Mail, Project, Service
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -35,7 +35,16 @@ class ImageModelTest(TestCase):
             description='Тестовое описание проекта',
         )
         cls.image = Image.objects.create(
-            project=cls.project, image=cls.uploaded_gif
+            project=cls.project, image=cls.uploaded_gif, description='Описание'
+        )
+        cls.service = Service.objects.create(
+            title='Тестовая услуга', description='Описание услуги', price='100 рублей'
+        )
+        cls.mail = Mail.objects.create(
+            name='Тестовое письмо',
+            phone_number='89993332211',
+            contact='telegram',
+            memo='Текст письма',
         )
 
     @classmethod
@@ -48,3 +57,16 @@ class ImageModelTest(TestCase):
         test_image = self.image
         test_path = test_image.image.url
         self.assertEqual(test_path, f'/media/{test_image.image.name}')
+
+    def test_models_str_output(self):
+        """Возвращает правильный результат применения метода str()."""
+        testing_models = {
+            self.category: self.category.title,
+            self.project: self.project.title,
+            self.image: self.image.description,
+            self.service: self.service.title,
+            self.mail: self.mail.name,
+        }
+        for testing_model, testing_field in testing_models.items():
+            with self.subTest():
+                self.assertEqual(str(testing_model), testing_field)

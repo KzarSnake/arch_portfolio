@@ -8,6 +8,7 @@ class MailTests(TestCase):
         self.client = Client()
 
     def test_form_send_mail(self):
+        """Валидная форма отправляет письмо администратору сайта."""
         form_data = {
             'name': 'Имя Фамилия',
             'phone_number': '98887774411',
